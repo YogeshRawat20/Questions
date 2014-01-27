@@ -11,6 +11,24 @@ import com.questions.connect.DBConnector;
 import com.questions.pojo.Questions;
 
 public class QuestionDao {
+	public JsonArray getAllSubjects() throws SQLException, IOException{
+		JsonArray bigArray = new JsonArray();
+		JsonObject jsonResponse = new JsonObject();
+		String query="select * from subjects";
+		try(Statement stmt=DBConnector.getInstance().getStatement();
+				ResultSet rst=stmt.executeQuery(query))
+		{
+			while( rst.next()){
+				JsonObject jsonObjectInner = new JsonObject();
+				jsonObjectInner.addProperty("sid", rst.getString(1));
+				jsonObjectInner.addProperty("stitle", rst.getString(2));
+				jsonObjectInner.addProperty("sdescription", rst.getString(3));
+				jsonObjectInner.addProperty("createdtime", rst.getString(4));
+				bigArray.add(jsonObjectInner);
+			}
+		}
+		return bigArray;
+	}
 	public JsonObject getQuestion( int qId){
 		System.out.println("getQuestions");
 		JsonArray bigArray = new JsonArray();
